@@ -17,15 +17,12 @@ def predict():
     data = request.json
     email_text = data.get('email_text', '')
 
-    if not email_text:
-        return jsonify({'error': 'Email text is required'}), 400
-
     label, confidence = predict_email(email_text, model, vectorizer)
     return jsonify({
-        'prediction': label,
-        'confidence': round(confidence, 2) if confidence else 'N/A'
+        "prediction": label,
+        "confidence": confidence
     })
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
