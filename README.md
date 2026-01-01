@@ -2,7 +2,7 @@
 
 ## Live Demo
 
-Live Application: [<Phishing Email Detection>](https://phishing-email-detection-su6j.onrender.com/)
+Live Application: [link](https://phishing-email-detection-su6j.onrender.com/)
 
 ## Project Overview
 
