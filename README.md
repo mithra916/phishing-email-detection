@@ -1,174 +1,90 @@
-# Phishing Email Detection System (ML + NLP + Flask)
-
+# Phishing Email Detection System
 
 ## Project Overview
 
 Phishing emails are one of the most common cybersecurity threats, exploiting human trust through deceptive language and urgency.
-This project implements an end-to-end phishing email detection system using Natural Language Processing (NLP) and Machine Learning, deployed as a live web application.
+This project detects whether an email is Safe, Suspicious, or Phishing by combining:
+- Classical ML (TF-IDF + classifiers)
+- Rule-based cyber heuristics
+- Emotional manipulation detection
+- Explainable risk analysis
+The goal is not just accuracy, but understanding why an email is flagged, which is critical in real-world cybersecurity workflows.
 
-Users can paste email content into a web dashboard and instantly receive:
-
-Phishing / Safe classification
-
-Confidence score
-
-Risk assessment
-
-## Features
-
-NLP-based text preprocessing
-
-TF-IDF feature extraction
-
-Multiple ML models trained and compared
-
-High phishing recall (~98%)
-
-Live prediction using Flask API
-
-Interactive web dashboard (HTML, CSS, JavaScript)
-
-Deployed and publicly accessible
-
-
-## Machine Learning Models Used
-
-The following models were trained and evaluated:
-
+## Key Features
+### ML-Based Classification
+TF-IDF vectorization (unigrams + bigrams)
+Trained models:
+CatBoost (primary)
 Logistic Regression
-
 Random Forest
-
-XGBoost
-
-CatBoost ✅ (Best performing model)
-
-Support Vector Machine (SVM)
-
+SVM
 Naive Bayes
+Final system uses CatBoost for best balance of performance and interpretability
 
-CatBoost was selected for deployment due to its strong balance between precision and recall.
+### Explainability (Cyber-Focused)
+Instead of returning only a label, the system explains:
+Why the email was flagged
+Which risk indicators were detected
 
+### Emotional Manipulation Detection
+Uses a transformer-based emotion model to detect:
+Fear
+Urgency
+Pressure
+Manipulative tone
+Emotional score is combined with ML prediction to reduce false negatives in social engineering attacks.
 
-## Model Performance
+### Rule-Based Attack Feature Engineering
+Cyber-specific heuristics:
+URL presence & shortened URLs
+Executable file links (.exe, .zip)
+Urgency keywords (verify, urgent, suspend)
+Financial scam indicators
+Brand impersonation keywords
+Excessive capitalization
+These rules help reduce false positives and false negatives, especially in edge cases like CEO fraud (BEC).
 
-Phishing Recall: ~97–98%
+### Threat Categorization
+Instead of binary output, emails are categorized into:
+Credential Harvesting
+Financial Scam
+Malware Delivery
+Social Engineering
+Benign / Informational
+This mirrors real SOC alert classification.
 
-Low False Negatives, which is critical for cybersecurity systems
+### Risk Scoring System
+Final output includes:
+Prediction (Safe / Suspicious / Phishing)
+Confidence score
+Risk level (Low / Medium / High)
+Emotion risk score
+URL count
+Threat type
+Reasons (explainability)
 
-Evaluation done using:
+## How to Run
+1.Install dependencies
+pip install -r requirements.txt
 
-Confusion Matrix
+2️.Train the model
+python train_models.py
 
-Precision, Recall, F1-score
+3️.Run the web app
+python app.py
 
-## Tech Stack
+Open browser:
+http://127.0.0.1:5000/
 
-Backend
+## Limitations (Honest)
+This is not a production-grade email gateway
+Model depends on dataset quality
+Emotion detection adds latency on CPU
+Advanced spear-phishing may bypass heuristics
 
-Python
-
-Flask
-
-Scikit-learn
-
-CatBoost
-
-XGBoost
-
-NLP
-
-TF-IDF Vectorization
-
-Text cleaning and normalization
-
-Frontend
-
-HTML
-
-CSS
-
-JavaScript
-
-Deployment
-
-Flask-based web service
-
-Deployed on cloud platform
-
-## Project Structure
-```
-phishing-email-detection/
-│
-├── app.py
-├── train_models.py
-├── test_model.py
-├── requirements.txt
-├── README.md
-│
-├── models/
-│   ├── catboost.pkl
-│   └── tfidf_vectorizer.pkl
-│
-├── src/
-│   ├── preprocess.py
-│   ├── predict.py
-│   └── __init__.py
-│
-├── templates/
-│   └── index.html
-│
-└── static/
-    ├── style.css
-    └── script.js
-```
-
-
-## How It Works
-
-Email text is cleaned and normalized
-
-TF-IDF converts text into numerical features
-
-Trained ML model predicts phishing probability
-
-Result and confidence are displayed on the dashboard
-
-## API Usage
-
-Endpoint: /predict
-Method: POST
-
-Request Body
-
-{
-  "email_text": "Urgent! Verify your account immediately."
-}
-
-
-Response
-
-{
-  "prediction": "Phishing Email",
-  "confidence": 0.73
-}
-
-## Future Enhancements
-
-Risk-level classification (Low / Medium / High)
-
-Suspicious keyword explanation
-
-Cross-dataset validation
-
-Transformer-based NLP models (BERT)
-
-## Why This Project Matters
-
-Demonstrates real-world cybersecurity problem solving
-
-Covers full ML lifecycle: data → model → evaluation → deployment
-
-Shows full-stack skills: ML + Backend + Frontend
-
-Production-style thinking with recall-focused evaluation
+## Future Improvements
+Header analysis (SPF, DKIM, DMARC)
+Domain reputation checks
+Attachment scanning
+Online learning with feedback loop
+SOC-style alert dashboard with logs
